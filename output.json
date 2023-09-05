@@ -1,0 +1,141 @@
+{
+    "resources": [
+        {
+            "project_id": "05603d0bc78010f72f2bc01184bd43e5",
+            "project_name": "ap-southeast-1",
+            "resource_type": "images",
+            "resource_id": "b17da19d-9806-4af8-825e-419b38a642ba",
+            "resource_name": "Check Point R81 T392_172.16.0.2",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "05603d0bc78010f72f2bc01184bd43e5",
+            "project_name": "ap-southeast-1",
+            "resource_type": "images",
+            "resource_id": "523233f5-5c60-4fe4-915d-8b0a8b290149",
+            "resource_name": "Check_Point_R81_T392.iso",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "057fd557628010e02ff1c01121650dca",
+            "project_name": "ap-southeast-3",
+            "resource_type": "images",
+            "resource_id": "6765e4a8-e10d-4ed9-b79b-af3c19b71291",
+            "resource_name": "Check_Point_R81_T392_Configured",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581f4984380267a2f43c011700afdb8",
+            "project_name": "cn-north-1",
+            "resource_type": "images",
+            "resource_id": "ecdf2ca4-8235-4fd8-b838-ab94b4799cca",
+            "resource_name": "Checkpoint Firewall",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581f4984380267a2f43c011700afdb8",
+            "project_name": "cn-north-1",
+            "resource_type": "images",
+            "resource_id": "eb647d88-99f6-41ef-8321-0c40c82532a5",
+            "resource_name": "Windows Server 2022 Standard 64bit",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581f4984380267a2f43c011700afdb8",
+            "project_name": "cn-north-1",
+            "resource_type": "images",
+            "resource_id": "91fa3397-69d2-4c63-9dac-3ccc6a06a6d1",
+            "resource_name": "Windows 10 Pro Version 22H2",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "05603d0bc78010f72f2bc01184bd43e5",
+            "project_name": "ap-southeast-1",
+            "resource_type": "security-groups",
+            "resource_id": "75c95a41-7491-4ded-ba34-c1bbc5ce89f6",
+            "resource_name": "sg-Geethaka-HK",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "057fd557628010e02ff1c01121650dca",
+            "project_name": "ap-southeast-3",
+            "resource_type": "security-groups",
+            "resource_id": "0c921abc-1a5b-44ab-ad8f-cd722da519d0",
+            "resource_name": "sg-Geethaka",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581e3f62d800f6a2f6cc0114fdb4bb7",
+            "project_name": "cn-south-1",
+            "resource_type": "security-groups",
+            "resource_id": "6ff70391-0712-4cc9-b77b-669076bcb021",
+            "resource_name": "sg-all",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "06c9c164a70026422f90c011d33994e9",
+            "project_name": "cn-east-3",
+            "resource_type": "security-groups",
+            "resource_id": "69a03701-af0f-41a5-86c6-e609f3304a37",
+            "resource_name": "sg-46ab",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "05603d0bc78010f72f2bc01184bd43e5",
+            "project_name": "ap-southeast-1",
+            "resource_type": "vpcs",
+            "resource_id": "58a5997f-aa17-4b83-9030-a8e5643ccd35",
+            "resource_name": "vpc-Geethaka",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "057fd557628010e02ff1c01121650dca",
+            "project_name": "ap-southeast-3",
+            "resource_type": "vpcs",
+            "resource_id": "17a879ae-dc7c-4a82-bff3-962daa143db9",
+            "resource_name": "vpc-GS",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581e3f62d800f6a2f6cc0114fdb4bb7",
+            "project_name": "cn-south-1",
+            "resource_type": "vpcs",
+            "resource_id": "16b79b85-2cbc-42bc-a121-005f82cf93d2",
+            "resource_name": "vpc-002",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581e3f62d800f6a2f6cc0114fdb4bb7",
+            "project_name": "cn-south-1",
+            "resource_type": "vpcs",
+            "resource_id": "ea8ad119-3d85-4612-97e8-8d89bcec7a73",
+            "resource_name": "vpc-001",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        },
+        {
+            "project_id": "0581f4984380267a2f43c011700afdb8",
+            "project_name": "cn-north-1",
+            "resource_type": "vpcs",
+            "resource_id": "34b81993-ed65-43b8-8a02-4cafd416b4a3",
+            "resource_name": "vpc-Geethaka",
+            "resource_detail": null,
+            "enterprise_project_id": "cc8e405d-638b-4e5b-a81f-e945bf626e66"
+        }
+    ],
+    "errors": [],
+    "total_count": 15
+}
