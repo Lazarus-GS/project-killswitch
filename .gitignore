@@ -161,3 +161,8 @@ cython_debug/
 
 #credentials
 user.py
+
+#temp
+tf_configs/
+subnets.json
+output.json
