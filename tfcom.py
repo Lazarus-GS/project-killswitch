@@ -38,11 +38,20 @@ def tfcommands(base_folder):
     for project_folder in project_folders:
         project_path = os.path.join(base_folder, project_folder)
        
-        init_command = ['terraform', 'init']
-        execTf(init_command, project_path, 'terraform init')
+        initCommand = ['terraform', 'init']
+        execTf(initCommand, project_path, 'terraform init')
 
-        plan_command = ['terraform', 'plan', '-generate-config-out=generated_output.tf']
-        execTf(plan_command, project_path, 'terraform plan')
+        configPlanCommand = ['terraform', 'plan', '-generate-config-out=generated_output.tf']
+        execTf(configPlanCommand, project_path, 'terraform -config plan')
+
+        # planCommand = ['terraform', 'plan']
+        # execTf(planCommand, project_path, 'terraform plan')
+
+        # applyCommand = ['terraform', 'apply', '-auto-approve']
+        # execTf(applyCommand, project_path, 'terraform apply')
+
+        # destroyCommand = ['terraform', 'destroy', '-auto-approve']
+        # execTf(destroyCommand, project_path, 'terraform destroy')
 
 if __name__ == "__main__":
     base_folder = "tf_configs"
