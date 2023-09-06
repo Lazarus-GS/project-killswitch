@@ -166,3 +166,4 @@ user.py
 tf_configs/
 subnets.json
 output.json
+json*
