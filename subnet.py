@@ -2,9 +2,10 @@ import requests
 import json, signal
 from user import username, password, domain
 from config import mappedRegion
-from main import loader, signal_handler
+from utils import Loader, signalHandler
 
-signal.signal(signal.SIGINT, signal_handler)
+loader = Loader(3, 0.5)
+signalHandler.register_signal_handler()
 
 def authenticateProject(username, password, domain, region_name):
     auth_url = "https://iam.myhuaweicloud.com/v3/auth/tokens"
