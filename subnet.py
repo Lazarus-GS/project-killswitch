@@ -54,7 +54,7 @@ def get_subnets(authTokenProject, region_name, region_id):
     responseSubnet = requests.get(subnets_url, headers=headers)
     
     if responseSubnet.status_code == 200:
-        return responseSubnet.json()
+        return json.loads(responseSubnet.text)
     else:
         raise Exception(f"Failed to query subnets for project {region_name}.")
 
@@ -97,6 +97,10 @@ def create_and_save_vpc_project_mapping(json_data):
 
 def main():
     
+    if len(sys.argv) > 1:
+        json_data = json.loads(sys.argv[1])
+        create_and_save_vpc_project_mapping(json_data)
+
     subnet_data = {}
     
     for region_name, region_id in mappedRegion.items():
@@ -110,19 +114,15 @@ def main():
     loader.stop()
     print("\n\033[92mSubnets saved to subnets.json\033[0m\n")
 
-    if len(sys.argv) > 1:
-        json_data = json.loads(sys.argv[1])
-        create_and_save_vpc_project_mapping(json_data)
-
-    create_and_save_vpc_project_mapping(json_data)
     relevant_subnet_ids = []
     with open('vpc_project_mapping.json', 'r') as json_file:
         vpc_project_mapping = json.load(json_file)
         for region_name, region_id in mappedRegion.items():
             for subnet in subnet_data.get(region_name, []):
-                vpc_id = subnet.get("vpc_id")
-                if vpc_id in vpc_project_mapping:
-                    relevant_subnet_ids.append(subnet["id"])
+                if isinstance(subnet, dict):  # Check if the subnet is a dictionary
+                    vpc_id = subnet.get("vpc_id")
+                    if vpc_id in vpc_project_mapping:
+                        relevant_subnet_ids.append(subnet["id"])
 
     with open('relevant_subnets.json', 'w') as json_file:
         json.dump(relevant_subnet_ids, json_file, indent=4)

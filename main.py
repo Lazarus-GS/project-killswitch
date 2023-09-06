@@ -145,7 +145,7 @@ def main():
             huawei_cloud_api.saveJson(json_data, "output.json")
 
             loader.start("\nGetting Subnet details")
-            subprocess.run(["python3", "subnet.py"])
+            subprocess.run(["python3", "subnet.py", json.dumps(json_data)])
 
             loader.start("\nGenerating Terraform configurations")
             terraform_config_generator = TerraformConfigGenerator(json_data, resource_type_mapping)
@@ -164,7 +164,8 @@ def main():
 
     if user_input == 'y':
         print("\nContinuing to Phase 2...")
-        subprocess.run(["python3", "tfcom.py", json.dumps(json_data)])
+        
+        subprocess.run(["python3", "tfcom.py"])
     elif user_input == 'n':
         print("Program terminated.")
     else:
