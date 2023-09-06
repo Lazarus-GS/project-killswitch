@@ -152,16 +152,6 @@ def main():
             terraform_config_generator.generate_config(output_folder)
             loader.stop()
 
-            vpc_project_mapping = {}
-            for resource in json_data["resources"]:
-                resource_id = resource["resource_id"]
-                resource_type = resource["resource_type"]
-                project_name = resource["project_name"]
-                if resource_type == "vpcs":
-                    vpc_project_mapping[resource_id] = project_name
-
-            with open('vpc_project_mapping.json', 'w') as json_file:
-                json.dump(vpc_project_mapping, json_file, indent=4)
         else:
             loader.stop()
             print(f"API call failed with status code: {response.status_code}")

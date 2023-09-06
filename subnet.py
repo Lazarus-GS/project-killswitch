@@ -114,6 +114,7 @@ def main():
         json_data = json.loads(sys.argv[1])
         create_and_save_vpc_project_mapping(json_data)
 
+    create_and_save_vpc_project_mapping(json_data)
     relevant_subnet_ids = []
     with open('vpc_project_mapping.json', 'r') as json_file:
         vpc_project_mapping = json.load(json_file)
