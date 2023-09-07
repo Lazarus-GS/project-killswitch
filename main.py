@@ -10,6 +10,7 @@ from utils import Loader, signalHandler
 
 signalHandler.register_signal_handler()
 loader = Loader(3, 0.5)
+jsondumps_folder = 'jsondumps'
 class HuaweiCloudAPI:
     def __init__(self, auth_url, query_url, auth_headers, auth_json_body):
         self.auth_url = auth_url
@@ -35,7 +36,8 @@ class HuaweiCloudAPI:
             response = requests.post(self.query_url, json=query_json_body, headers=query_headers)
             return response
 
-    def saveJson(self, json_data, file_path):  
+    def saveJson(self, json_data, file_path):
+        file_path = os.path.join(jsondumps_folder, file_path)  
         with open(file_path, "w") as outfile:
             json.dump(json_data, outfile, indent=4)
         loader.stop()
@@ -142,6 +144,9 @@ def main():
 
             os.makedirs(output_folder)
 
+            if not os.path.exists(jsondumps_folder):
+                os.makedirs(jsondumps_folder)
+
             huawei_cloud_api.saveJson(json_data, "output.json")
 
             loader.start("\nGenerating Terraform configurations")
@@ -149,7 +154,8 @@ def main():
             terraform_config_generator.generate_config(output_folder)
             loader.stop()
 
-            loader.start("\nGetting Subnet details")
+            loader.start("\nGetting Subnet details\n")
+            loader.stop()
             subprocess.run(["python3", "subnet.py", json.dumps(json_data)])
 
         else:

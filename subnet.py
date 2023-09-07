@@ -4,7 +4,7 @@ from config import mappedRegion
 from utils import Loader, signalHandler
 
 logging.basicConfig(level=logging.INFO, format='%(message)s')
-loader = Loader(3, 0.5)
+# loader = Loader(3, 0.5)
 
 class SubnetFilter:
     def __init__(self):
@@ -105,13 +105,12 @@ class SubnetFilter:
 
     def main(self):
         subnet_data = {}
-
+        # loader.stop()
         for region_name, region_id in mappedRegion.items():
             auth_token_project = self.authenticate_project(region_name)
             subnets = self.get_subnets(auth_token_project, region_name, region_id)
             subnet_data[region_name] = subnets
-        loader.stop()    
-        logging.info("API calls for all subnets completed") 
+            logging.info(f"Subnet API call for {region_name} completed") 
 
         if not os.path.exists(self.jsondumps_folder):
             os.makedirs(self.jsondumps_folder)
@@ -119,13 +118,14 @@ class SubnetFilter:
         subnets_json_path = os.path.join(self.jsondumps_folder, 'subnets.json')
         filtered_vpc_json_path = os.path.join(self.jsondumps_folder, 'filtered_vpc.json')
         filtered_subnets_json_path = os.path.join(self.jsondumps_folder, 'filtered_subnets.json')
+        output_json_path = os.path.join(self.jsondumps_folder, 'output.json')
 
         with open(subnets_json_path, 'w') as json_file:
             json.dump(subnet_data, json_file, indent=4)
 
-        logging.info(f"\nSubnets saved to {subnets_json_path}")
+        logging.info(f"\n\033[92mSubnets saved to {subnets_json_path}\033[0m\n")
 
-        with open('output.json') as f:
+        with open(output_json_path) as f:
             output_data = json.load(f)
 
         vpc_data = self.filter_vpcs(output_data)
