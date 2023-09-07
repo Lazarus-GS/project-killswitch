@@ -8,7 +8,7 @@ from utils import Loader, signalHandler
 
 loader = Loader(3, 0.5)
 signalHandler.register_signal_handler()
-subnet_idx = {}
+
 
 def authenticateProject(username, password, domain, region_name):
     auth_url = "https://iam.myhuaweicloud.com/v3/auth/tokens"
@@ -56,11 +56,14 @@ def get_subnets(authTokenProject, region_name, region_id):
     responseSubnet = requests.get(subnets_url, headers=headers)
 
     if responseSubnet.status_code == 200:
-        return json.loads(responseSubnet.text)
+        json_data_subnet = responseSubnet.json()
+        return responseSubnet
     else:
         raise Exception(f"Failed to query subnets for project {region_name}.")
 
+
 def main():
+    
     subnet_data = {}
     
     for region_name, region_id in mappedRegion.items():
@@ -74,36 +77,6 @@ def main():
     loader.stop()
     print("\n\033[92mSubnets saved to subnets.json\033[0m\n")
 
-    # Load the relevant data from output.json
-    with open('output.json') as f:
-        output_data = json.load(f)
-
-    # Filter the VPC object IDs and their project names
-    vpc_data = {}
-    for object in output_data['resources']:
-        if object['resource_type'] == 'vpcs':
-            vpc_data[object['resource_id']] = object['project_name']
-
-    # Save the filtered VPC data to a new JSON file
-    with open('filtered_vpc.json', 'w') as jvpc:
-        json.dump(vpc_data, jvpc, indent=4)       
-    # Load the subnet data from subnets.json
-    with open('subnets.json') as f:
-        subnet_data = json.load(f)
-
-    # Filter the subnet IDs by VPC ID and store them with their project names
-    filtered_subnet_data = {}
-    for region_name, region_subnets in subnet_data.items():
-        for subnet in region_subnets['subnets']:
-            vpc_id = subnet['vpc_id']
-            if vpc_id in vpc_data:
-                project_name = vpc_data[vpc_id]
-                subnet_id = subnet['id']
-                filtered_subnet_data[subnet_id] = project_name
-
-    # Save the filtered subnet data to a new JSON file
-    with open('filtered_subnets.json', 'w') as f:
-        json.dump(filtered_subnet_data, f, indent=4)
 
 if __name__ == "__main__":
     main()
