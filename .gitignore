@@ -164,6 +164,7 @@ user.py
 
 #temp
 tf_configs/
+jsondumps/
 subnets.json
 output.json
 json*

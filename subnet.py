@@ -9,7 +9,8 @@ loader = Loader(3, 0.5)
 class SubnetFilter:
     def __init__(self):
         signalHandler.register_signal_handler()
-        
+        self.jsondumps_folder = 'jsondumps'
+
     def authenticate_project(self, region_name):
         auth_url = "https://iam.myhuaweicloud.com/v3/auth/tokens"
         headers = {"Content-Type": "application/json"}
@@ -112,21 +113,29 @@ class SubnetFilter:
         loader.stop()    
         logging.info("API calls for all subnets completed") 
 
-        with open('subnets.json', 'w') as json_file:
+        if not os.path.exists(self.jsondumps_folder):
+            os.makedirs(self.jsondumps_folder)
+
+        subnets_json_path = os.path.join(self.jsondumps_folder, 'subnets.json')
+        filtered_vpc_json_path = os.path.join(self.jsondumps_folder, 'filtered_vpc.json')
+        filtered_subnets_json_path = os.path.join(self.jsondumps_folder, 'filtered_subnets.json')
+
+        with open(subnets_json_path, 'w') as json_file:
             json.dump(subnet_data, json_file, indent=4)
 
-        logging.info("\nSubnets saved to subnets.json")
+        logging.info(f"\nSubnets saved to {subnets_json_path}")
 
         with open('output.json') as f:
             output_data = json.load(f)
 
         vpc_data = self.filter_vpcs(output_data)
-        with open('filtered_vpc.json', 'w') as jsonVpc:
+
+        with open(filtered_vpc_json_path, 'w') as jsonVpc:
             json.dump(vpc_data, jsonVpc, indent=4)
 
         filtered_subnet_data = self.filter_subnets(subnet_data, vpc_data)
 
-        with open('filtered_subnets.json', 'w') as f:
+        with open(filtered_subnets_json_path, 'w') as f:
             json.dump(filtered_subnet_data, f, indent=4)
         
         tf_configs_output_folder = "tf_configs"
