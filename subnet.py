@@ -109,8 +109,8 @@ class SubnetFilter:
             auth_token_project = self.authenticate_project(region_name)
             subnets = self.get_subnets(auth_token_project, region_name, region_id)
             subnet_data[region_name] = subnets
+        loader.stop()    
         logging.info("API calls for all subnets completed") 
-
 
         with open('subnets.json', 'w') as json_file:
             json.dump(subnet_data, json_file, indent=4)
@@ -124,10 +124,8 @@ class SubnetFilter:
         with open('filtered_vpc.json', 'w') as jsonVpc:
             json.dump(vpc_data, jsonVpc, indent=4)
 
-        # Filter subnets based on vpc_data
         filtered_subnet_data = self.filter_subnets(subnet_data, vpc_data)
 
-        # Save filtered subnets to filtered_subnets.json
         with open('filtered_subnets.json', 'w') as f:
             json.dump(filtered_subnet_data, f, indent=4)
         
