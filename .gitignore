@@ -170,3 +170,4 @@ output.json
 json*
 Dockerfile
 .dockerignore
+requirements.txt
