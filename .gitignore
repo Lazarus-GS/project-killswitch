@@ -168,3 +168,5 @@ jsondumps/
 subnets.json
 output.json
 json*
+Dockerfile
+.dockerignore
