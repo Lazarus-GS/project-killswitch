@@ -5,7 +5,7 @@ import requests
 import json
 from config import auth_headers, resource_type_mapping
 from config import auth_json_body, query_json_body
-from user import idEntProject, nameEntProject
+from user import idEntProject, nameEntProject, ak, sk
 from utils import Loader, signalHandler
 
 signalHandler.register_signal_handler()
@@ -93,8 +93,8 @@ class TerraformConfigGenerator:
                 '# Configure the HuaweiCloud Provider\n'
                 'provider "huaweicloud" {\n'
                 'region     = "' + project_name + '"\n'
-                'access_key = "CDFYRVWI6RZVLWYPVY0M"\n'
-                'secret_key = "A0U1YivtYl8Rfk8Dea8WwHi2oyiSg0npTEqac8rq"\n'
+                f'access_key = "{ak}"\n'
+                f'secret_key = "{sk}"\n'
                 '}\n'
             )
 

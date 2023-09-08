@@ -40,8 +40,8 @@ def tf_commands(base_folder):
         apply_command = ["terraform", "apply", "-auto-approve"]
         exec_tf(apply_command, project_path, "terraform apply")
 
-        destroy_command = ["terraform", "destroy", "-auto-approve"]
-        exec_tf(destroy_command, project_path, "terraform destroy")
+        # destroy_command = ["terraform", "destroy", "-auto-approve"]
+        # exec_tf(destroy_command, project_path, "terraform destroy")
 
 if __name__ == "__main__":
     base_folder = "tf_configs"
