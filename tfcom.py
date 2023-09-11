@@ -6,7 +6,7 @@ from user import nameEntProject
 logging.basicConfig(level=logging.INFO, format='%(message)s')
 
 def run_terraform_command(command, project_folder, command_name):
-    logging.info(f"\033[0;34Running '{command_name}' in {project_folder}...\033[0m")
+    logging.info(f"\033[0;34mRunning '{command_name}' in {project_folder}...\033[0m")
 
     process = subprocess.run(
         command,
