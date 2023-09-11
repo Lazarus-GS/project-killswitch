@@ -1,9 +1,12 @@
 import os
 import subprocess
-from user import nameEntProject
+import logging
 
-def exec_tf(command, project_folder, command_name):
-    print(f"\033[0;34mRunning '{command_name}' in {project_folder}...\033[0m")
+from user import nameEntProject
+logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+def run_terraform_command(command, project_folder, command_name):
+    logging.info(f"\033[0;34Running '{command_name}' in {project_folder}...\033[0m")
 
     process = subprocess.run(
         command,
@@ -17,10 +20,10 @@ def exec_tf(command, project_folder, command_name):
     stderr = process.stderr
 
     if process.returncode == 0:
-        print(f"\033[93m'{command_name}' executed successfully in {project_folder}\033[0m")
+        logging.info(f"\033[93m'{command_name}' executed successfully in {project_folder}\033[0m")
         print(stdout)
     else:
-        print(f"\033[91mError while executing '{command_name}' in {project_folder}\033[0m")
+        logging.error(f"\033[91mError while executing '{command_name}' in {project_folder}\033[0m")
         print(stderr)
 
 def tf_commands(base_folder):
@@ -32,16 +35,16 @@ def tf_commands(base_folder):
         project_path = os.path.join(base_folder, project_folder)
 
         init_command = ["terraform", "init"]
-        exec_tf(init_command, project_path, "terraform init")
+        run_terraform_command(init_command, project_path, "terraform init")
 
         config_plan_command = ["terraform", "plan", "-generate-config-out=generated_output.tf"]
-        exec_tf(config_plan_command, project_path, "terraform plan")
+        run_terraform_command(config_plan_command, project_path, "terraform plan")
 
         apply_command = ["terraform", "apply", "-auto-approve"]
-        exec_tf(apply_command, project_path, "terraform apply")
+        run_terraform_command(apply_command, project_path, "terraform apply")
 
         # destroy_command = ["terraform", "destroy", "-auto-approve"]
-        # exec_tf(destroy_command, project_path, "terraform destroy")
+        # run_terraform_command(destroy_command, project_path, "terraform destroy")
 
 if __name__ == "__main__":
     base_folder = "tf_configs"
