@@ -43,3 +43,19 @@ class signalHandler:
     @classmethod
     def register_signal_handler(cls):
         signal.signal(signal.SIGINT, cls.handle_signal)
+
+class Banner:
+    @staticmethod
+    def show_banner():
+        banner = '''
+Wellcome to the
+         ____            _           _     _  ___ _ _              _ _       _     
+        |  _ \ _ __ ___ (_) ___  ___| |_  | |/ (_) | |_____      _(_) |_ ___| |__  
+        | |_) | '__/ _ \| |/ _ \/ __| __| | ' /| | | / __\ \ /\ / / | __/ __| '_ \ 
+        |  __/| | | (_) | |  __/ (__| |_  | . \| | | \__ \\ V  V /| | || (__| | | |
+        |_|   |_|  \___// |\___|\___|\__| |_|\_\_|_|_|___/ \_/\_/ |_|\__\___|_| |_|
+                      |__/                                                         
+
+        © Geethaka Perera (LAZURUS)       
+        '''
+        print(banner)

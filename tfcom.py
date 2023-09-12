@@ -20,7 +20,8 @@ def run_terraform_command(command, project_folder, command_name, print_stdout = 
     stderr = process.stderr
 
     if process.returncode == 0:
-        logging.info(f"\033[93m'{command_name}' executed successfully in {project_folder}\033[0m")
+        # logging.info(f"\033[93m'{command_name}' executed successfully in {project_folder}\033[0m")
+        logging.info("\033[1m\033[92m✓\033[0m \033[1mDone\033[0m")
         if print_stdout:
             print(stdout)
     else:
@@ -42,7 +43,7 @@ def tf_commands(base_folder):
         run_terraform_command(config_plan_command, project_path, "terraform plan")
 
         apply_command = ["terraform", "apply", "-auto-approve"]
-        run_terraform_command(apply_command, project_path, "terraform apply",print_stdout = True)
+        run_terraform_command(apply_command, project_path, "terraform apply",print_stdout = False)
 
         # destroy_command = ["terraform", "destroy", "-auto-approve"]
         # run_terraform_command(destroy_command, project_path, "terraform destroy")

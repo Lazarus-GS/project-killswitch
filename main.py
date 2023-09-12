@@ -6,8 +6,9 @@ import json
 from config import auth_headers, resource_type_mapping
 from config import auth_json_body, query_json_body
 from user import idEntProject, nameEntProject, ak, sk
-from utils import Loader, signalHandler
+from utils import Loader, signalHandler, Banner
 
+Banner.show_banner()
 signalHandler.register_signal_handler()
 loader = Loader(3, 0.5)
 jsondumps_folder = 'jsondumps'
@@ -127,7 +128,7 @@ class TerraformConfigGenerator:
 
 def main():
 
-    loader.start(f"\nGetting resources from project '{nameEntProject}'")
+    loader.start(f"\nGetting resources from project \033[95m'{nameEntProject}'\033[0m")
 
     auth_url = "https://eps.myhuaweicloud.com/v3/auth/tokens"
     query_url = f"https://eps.myhuaweicloud.com/v1.0/enterprise-projects/{idEntProject}/resources/filter"
