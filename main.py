@@ -154,8 +154,9 @@ def main():
             terraform_config_generator.generate_config(output_folder)
             loader.stop()
 
-            loader.start("\nGetting Subnet details\n")
+            loader.start("\nGetting Subnet details")
             loader.stop()
+            print("\n")
             subprocess.run(["python3", "subnet.py", json.dumps(json_data)])
 
         else:
