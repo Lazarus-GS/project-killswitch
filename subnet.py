@@ -10,6 +10,7 @@ class SubnetFilter:
     def __init__(self):
         signalHandler.register_signal_handler()
         self.jsondumps_folder = 'jsondumps'
+        self.tokens = {}
 
     def authenticate_project(self, region_name):
         auth_url = "https://iam.myhuaweicloud.com/v3/auth/tokens"
@@ -32,7 +33,9 @@ class SubnetFilter:
         try:
             response_subnet = requests.post(auth_url, json=auth_body_project, headers=headers)
             response_subnet.raise_for_status()
-            return response_subnet.headers['X-Subject-Token']
+            token = response_subnet.headers['X-Subject-Token']
+            self.tokens[region_name] = token
+            return token
         except requests.exceptions.RequestException as e:
             logging.error(f"Failed to obtain authentication token: {e}")
             raise
@@ -115,10 +118,14 @@ class SubnetFilter:
         if not os.path.exists(self.jsondumps_folder):
             os.makedirs(self.jsondumps_folder)
 
+        tokens_json_path = os.path.join(self.jsondumps_folder, 'tokens.json')
         subnets_json_path = os.path.join(self.jsondumps_folder, 'subnets.json')
         filtered_vpc_json_path = os.path.join(self.jsondumps_folder, 'filtered_vpc.json')
         filtered_subnets_json_path = os.path.join(self.jsondumps_folder, 'filtered_subnets.json')
         output_json_path = os.path.join(self.jsondumps_folder, 'output.json')
+
+        with open(tokens_json_path, 'w') as tokenfile:
+            json.dump(self.tokens, tokenfile, indent=4)
 
         with open(subnets_json_path, 'w') as json_file:
             json.dump(subnet_data, json_file, indent=4)
