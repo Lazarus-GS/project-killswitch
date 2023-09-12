@@ -10,7 +10,6 @@ class PostConfig:
 
     @staticmethod
     def ecsConflicts(folder_path):
-        """Modify the generated_output.tf file in the given folder path."""
         filename = os.path.join(folder_path, "generated_output.tf")
 
         with open(filename, 'r') as f:
