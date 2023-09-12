@@ -1,9 +1,32 @@
-import os
+import os, re
 import subprocess
 import logging
 
 from user import nameEntProject
 logging.basicConfig(level=logging.INFO, format='%(message)s')
+
+class PostConfig:
+    """Post-processing configurations after generating Terraform files."""
+
+    @staticmethod
+    def ecsConflicts(folder_path):
+        """Modify the generated_output.tf file in the given folder path."""
+        filename = os.path.join(folder_path, "generated_output.tf")
+
+        with open(filename, 'r') as f:
+            content = f.read()
+
+        # Match ECS resource blocks
+        ecs_pattern = r'(resource\s+"huaweicloud_compute_instance".*?})'
+        ecs_blocks = re.findall(ecs_pattern, content, flags=re.DOTALL)
+
+        for block in ecs_blocks:
+            # Within each ECS block, comment out the security_groups line
+            modified_block = re.sub(r'^(.*security_groups\s*=\s*\[.*\].*)$', r'#\1', block, flags=re.MULTILINE)
+            content = content.replace(block, modified_block)
+
+        with open(filename, 'w') as f:
+            f.write(content)
 
 def run_terraform_command(command, project_folder, command_name, print_stdout = False):
     logging.info(f"\033[0;34mRunning '{command_name}' in {project_folder}...\033[0m")
@@ -40,10 +63,15 @@ def tf_commands(base_folder):
         run_terraform_command(init_command, project_path, "terraform init")
 
         config_plan_command = ["terraform", "plan", "-generate-config-out=generated_output.tf"]
-        run_terraform_command(config_plan_command, project_path, "terraform plan")
+        run_terraform_command(config_plan_command, project_path, "terraform config plan")
+
+        PostConfig.ecsConflicts(project_path)
+
+        plan_command = ["terraform", "plan"]
+        run_terraform_command(plan_command, project_path, "terraform plan")
 
         apply_command = ["terraform", "apply", "-auto-approve"]
-        run_terraform_command(apply_command, project_path, "terraform apply",print_stdout = False)
+        run_terraform_command(apply_command, project_path, "terraform apply",print_stdout = True)
 
         # destroy_command = ["terraform", "destroy", "-auto-approve"]
         # run_terraform_command(destroy_command, project_path, "terraform destroy")
