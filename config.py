@@ -76,7 +76,7 @@ resource_type_mapping = {
         "eip": "huaweicloud_vpc_eip",
         "loadbalancers": "huaweicloud_lb_loadbalancer",
         "pools": "huaweicloud_elb_pool",
-        "listners": "huaweicloud_lb_listener",
+        "listeners": "huaweicloud_lb_listener",
         "healthmonitors": "huaweicloud_elb_monitor",
         "members": "huaweicloud_elb_member",
         #"images": "huaweicloud_images_image",

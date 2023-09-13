@@ -171,3 +171,5 @@ json*
 Dockerfile
 .dockerignore
 requirements.txt
+test.py
+.idea/

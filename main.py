@@ -150,17 +150,17 @@ def main():
 
             huawei_cloud_api.saveJson(json_data, "output.json")
 
-            loader.start("\nGenerating Terraform configurations")
+            loader.start("\n\033[93mGenerating Terraform configurations\033[0m")
             terraform_config_generator = TerraformConfigGenerator(json_data, resource_type_mapping)
             terraform_config_generator.generate_config(output_folder)
             loader.stop()
 
-            loader.start("\nGetting Subnet details")
+            loader.start("\n\033[93mGetting Subnet details\033[0m")
             loader.stop()
             
             subprocess.run(["python3", "subnet.py", json.dumps(json_data)])
 
-            loader.start("\nGetting ELB details")
+            loader.start("\n\033[93mGetting ELB details\033[0m")
             loader.stop()
             
             subprocess.run(["python3", "elb.py", json.dumps(json_data)])
