@@ -157,8 +157,13 @@ def main():
 
             loader.start("\nGetting Subnet details")
             loader.stop()
-            print("\n")
+            
             subprocess.run(["python3", "subnet.py", json.dumps(json_data)])
+
+            loader.start("\nGetting ELB details")
+            loader.stop()
+            
+            subprocess.run(["python3", "elb.py", json.dumps(json_data)])
 
         else:
             loader.stop()
