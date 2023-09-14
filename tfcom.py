@@ -65,15 +65,16 @@ def tf_commands(base_folder):
         run_terraform_command(config_plan_command, project_path, "terraform config plan")
 
         PostConfig.ecsConflicts(project_path)
+        logging.info("\033[1m\033[92m✓\033[0m \033[1mPost Configs Done\033[0m")
 
         plan_command = ["terraform", "plan"]
         run_terraform_command(plan_command, project_path, "terraform plan")
 
         apply_command = ["terraform", "apply", "-auto-approve"]
-        run_terraform_command(apply_command, project_path, "terraform apply",print_stdout = True)
+        run_terraform_command(apply_command, project_path, "terraform apply")
 
-        # destroy_command = ["terraform", "destroy", "-auto-approve"]
-        # run_terraform_command(destroy_command, project_path, "terraform destroy")
+        destroy_command = ["terraform", "destroy", "-auto-approve"]
+        run_terraform_command(destroy_command, project_path, "terraform destroy",print_stdout = True)
 
 if __name__ == "__main__":
     base_folder = "tf_configs"
