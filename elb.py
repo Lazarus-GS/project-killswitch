@@ -10,7 +10,7 @@ class ELBStatusFilter:
     def __init__(self):
         self.jsondumps_folder = 'jsondumps'
         self.tf_configs_folder = 'tf_configs'
-        self.resource_count = {}  # To keep track of each resource type count
+        self.resource_count = {}
 
     def load_tokens(self):
         try:
@@ -28,63 +28,63 @@ class ELBStatusFilter:
             logging.error(f"output.json not found in {self.jsondumps_folder}")
             raise
 
-        elb_details = {}
-
-        for obj in data['resources']:
-            if obj['resource_type'] == 'loadbalancers':
-                elb_details[obj['resource_id']] = {
-                    'project_name': obj['project_name'],
-                    'project_id': obj['project_id']
-                }
+        elb_details = {obj['resource_id']: {
+            'project_name': obj['project_name'],
+            'project_id': obj['project_id']} for obj in data['resources'] if obj['resource_type'] == 'loadbalancers'}
 
         if not elb_details:
             logging.warning("No loadbalancers found in the provided output.json")
 
-        try:
-            with open(os.path.join(self.jsondumps_folder, 'elb_details.json'), 'w') as f:
-                json.dump(elb_details, f, indent=4)
-        except Exception as e:
-            logging.error(f"Error saving elb_details.json: {e}")
-            raise
+        with open(os.path.join(self.jsondumps_folder, 'elb_details.json'), 'w') as f:
+            json.dump(elb_details, f, indent=4)
 
         return elb_details
 
     def extract_elb_subresources(self, elb_status, project_name):
         loadbalancer_data = elb_status.get('statuses', {}).get('loadbalancer', {})
-
-        # Handle listeners and their nested sub-resources
+        
         for listener in loadbalancer_data.get('listeners', []):
             self.generate_tf_module('listeners', listener['id'], project_name)
 
-            # For each listener, look for pools, healthmonitors, and members
             for pool in listener.get('pools', []):
                 self.generate_tf_module('pools', pool['id'], project_name)
 
                 for member in pool.get('members', []):
-                    self.generate_tf_module('members', member['id'], project_name)
+                    self.generate_tf_module('members', member['id'], project_name, pool_id=pool['id'])
 
-                # Note: healthmonitor is singular and not in a list
                 healthmonitor = pool.get('healthmonitor')
                 if healthmonitor:
-                    self.generate_tf_module('healthmonitors', healthmonitor['id'], project_name)
+                    self.generate_tf_module('healthmonitor', healthmonitor['id'], project_name)
 
-    def generate_tf_module(self, resource_type, resource_id, project_name):
+    def generate_tf_module(self, resource_type, resource_id, project_name, pool_id=None):
         if resource_type not in self.resource_count:
             self.resource_count[resource_type] = 0
         self.resource_count[resource_type] += 1
 
         terraform_term = resource_type_mapping.get(resource_type)
-        if terraform_term:
+        if not terraform_term:
+            return
+
+        # Specialized template for members
+        if resource_type == "members" and pool_id:
+            resource_id = f"{pool_id}/{resource_id}"
+            terraform_module = f"""
+import {{
+  id = "{resource_id}"
+  to = {terraform_term}.imported_{resource_type}{self.resource_count[resource_type]}
+}}"""
+        # Default template for other resources
+        else:
             terraform_module = f"""
 import {{
   id = "{resource_id}"
   to = {terraform_term}.imported_{resource_type}{self.resource_count[resource_type]}
 }}"""
 
-            project_folder = os.path.join(self.tf_configs_folder, project_name)
-            file_path = os.path.join(project_folder, 'import.tf')
-            with open(file_path, 'a') as f:
-                f.write(terraform_module)
+        project_folder = os.path.join(self.tf_configs_folder, project_name)
+        file_path = os.path.join(project_folder, 'import.tf')
+        with open(file_path, 'a') as f:
+            f.write(terraform_module)
 
     def fetch_elb_status(self, elb_details, tokens):
         statuses = {}
@@ -116,12 +116,8 @@ import {{
                 except requests.exceptions.RequestException as e:
                     logging.error(f"Error fetching data for {elb_name} with API version {api_version}: {e}")
 
-        try:
-            with open(os.path.join(self.jsondumps_folder, 'filtered_elb_statuses.json'), 'w') as f:
-                json.dump(statuses, f, indent=4)
-        except Exception as e:
-            logging.error(f"Error saving filtered_elb_statuses.json: {e}")
-            raise
+        with open(os.path.join(self.jsondumps_folder, 'filtered_elb_statuses.json'), 'w') as f:
+            json.dump(statuses, f, indent=4)
 
     def main(self):
         try:
@@ -132,7 +128,6 @@ import {{
                 logging.info(f"ELB statuses saved to {os.path.join(self.jsondumps_folder, 'filtered_elb_statuses.json')}")
         except Exception as e:
             logging.error(f"An unexpected error occurred: {e}")
-
 
 if __name__ == "__main__":
     elb_filter = ELBStatusFilter()
