@@ -173,3 +173,5 @@ Dockerfile
 requirements.txt
 test.py
 .idea/
+backup/
+demo/

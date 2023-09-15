@@ -27,28 +27,54 @@ class PostConfig:
         with open(filename, 'w') as f:
             f.write(content)
 
-def run_terraform_command(command, project_folder, command_name, print_stdout = False):
+def run_terraform_command(command, project_folder, command_name, print_stdout=False):
     logging.info(f"\033[0;34mRunning '{command_name}' in {project_folder}...\033[0m")
 
-    process = subprocess.run(
-        command,
-        cwd=project_folder,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        universal_newlines=True,
-    )
+    if command_name == "terraform destroy":
+        with subprocess.Popen(command, 
+                              cwd=project_folder, 
+                              stdout=subprocess.PIPE, 
+                              stderr=subprocess.PIPE, 
+                              universal_newlines=True, 
+                              bufsize=1) as process:
 
-    stdout = process.stdout
-    stderr = process.stderr
+            while True:
+                output_line = process.stdout.readline()
+                if output_line:
+                    print(output_line.strip())
+                else:
+                    break
 
-    if process.returncode == 0:
-        # logging.info(f"\033[93m'{command_name}' executed successfully in {project_folder}\033[0m")
-        logging.info("\033[1m\033[92m✓\033[0m \033[1mDone\033[0m")
-        if print_stdout:
-            print(stdout)
+            stderr = process.stderr.read()
+
+            if process.returncode == 0:
+                logging.info("\033[1m\033[92m✓\033[0m \033[1mDone\033[0m")
+                if print_stdout and stderr:
+                    print(stderr)
+            else:
+                logging.error(f"\033[91mError while executing '{command_name}' in {project_folder}\033[0m")
+                if stderr:
+                    print(stderr)
     else:
-        logging.error(f"\033[91mError while executing '{command_name}' in {project_folder}\033[0m")
-        print(stderr)
+        process = subprocess.run(
+            command,
+            cwd=project_folder,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            universal_newlines=True,
+        )
+
+        stdout = process.stdout
+        stderr = process.stderr
+
+        if process.returncode == 0:
+            logging.info("\033[1m\033[92m✓\033[0m \033[1mDone\033[0m")
+            if print_stdout:
+                print(stdout)
+        else:
+            logging.error(f"\033[91mError while executing '{command_name}' in {project_folder}\033[0m")
+            print(stderr)
+
 
 def tf_commands(base_folder):
     project_folders = [
